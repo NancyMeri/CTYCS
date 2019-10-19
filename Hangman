@@ -1,0 +1,66 @@
+def turn(): 
+  indexList = []
+  guessList = []
+  guess = input("Input a character to guess:")
+  guess = guess.lower() # so capital letters are recognized
+  i = 0
+  for letter in charList: # essentially go through each letter in word
+    while i < length:
+      if guess == charList[i]: # if letter guessed appears in word
+        indexList.append(i) # add INDEX NUMBER to indexList (where the letter appears)
+        guessList.append(guess) # add CHARACTER GUESSED to charList
+      i+=1
+  print(indexList)
+  print(guessList)
+  if indexList == []: # if the guess does not appear in the word
+    global strikes # global needed to access strikes bc defined later in code
+    strikes -= 1
+    print("You have " + str(strikes) + " lives left!")
+  
+  # print board
+  i=0
+  for letter in charList:
+    while i < length:
+      if board[i] == None: 
+        board[i] = "_" # if space in list is empty, print a _
+      for index in indexList: # go through indexList
+        if i == index:
+          board[i] = guess # transfer correct guesses to board
+      i+=1
+  
+  print(board)
+
+# def printBoard():
+          
+#   return board
+
+def gameOver():
+  if "".join(board) == word: # take board and smush it into one string then check if = word
+    print("YOU WON!!!!!")
+    global end # access variable end because defined later
+    end = True # end game because player won!!!
+  if strikes == 0:
+    end = True # end game bc player is bad
+    print("YOU LOST :(") 
+    
+
+# INITIALIZE GAME -- THIS ONLY HAPPENS ONCE WHEN GAME STARTS UP 
+print("Welcome to hangman!!")
+word = input("Input a word to be guessed:")
+word = word.lower() #so is not case sensitive
+hint = input("Write a hint for your player:")
+charList = list(word) #split word into characters
+length = len(charList)
+clear = "\n" * 100 #clear the screen so player can't see the word!
+board = [None] * length # create empty board
+strikes = 6
+end = False # when this is true, game will end
+
+print(clear)
+print("** hint: " + hint) # print hint after board is cleared
+
+# GAME LOOP -- this loop will run until 'end' is set to false in gameOver()
+while end == False: 
+  turn() 
+  gameOver() # check if game has ended
+  
